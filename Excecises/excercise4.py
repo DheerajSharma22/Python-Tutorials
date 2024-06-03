@@ -1,44 +1,48 @@
 import random
+import string
 
 print("Welcome to endecoder.")
 choice = int(input("Enter 1 for encode a word or 2 for decode a word :- "))
 
-def generateRandomChars():
-    charList = "abcdefghijklmnopqrstuvwxyz"
-    randomChars = random.choice(charList) + random.choice(charList) + random.choice(charList)
-    return randomChars
-    
-def reverse(word):
-    reversed_word = ""
-    for i in range(len(word)-1, -1, -1):
-        reversed_word+=word[i]
-    return reversed_word
-    
-def encode(word):
-    if (len(word) <= 2):
-        return reverse(word)
-        
-    encoded_word = word[1:len(word)]
-    encoded_word += word[0]
-    encoded_word = generateRandomChars() + encoded_word + generateRandomChars()
-    return encoded_word
 
-def decode(word):
-    if (len(word) <= 2):
-        return reverse(word)
+def generateRandomChars():
+    randomChars = random.choices(string.ascii_lowercase, k=3)
+    return "".join(randomChars)
     
-    decoded_word = word[3:len(word)-4]
-    decoded_word = word[len(word)-4] + decoded_word
-    return decoded_word
+def encode(words):
+    code_list = []
+    for word in words:    
+        if (len(word) <= 2):
+            encoded_word = word[::-1]
+            code_list.append(encoded_word)
+        else:    
+            encoded_word = generateRandomChars() + word[1:] + word[0] + generateRandomChars()
+            code_list.append(encoded_word)
+    return " ".join(code_list)
+            
+        
+
+def decode(words):
+    code_list = []
+    for word in words:    
+        if (len(word) <= 2):
+            encoded_word = word[::-1]
+            code_list.append(encoded_word)
+        else:    
+            encoded_word = word[-4] + word[3:-4]
+            code_list.append(encoded_word)
+    return " ".join(code_list)
     
 
 if (choice == 1):
-    word = input("Enter a word to encode :- ")
-    encoded_word = encode(word)
-    print(f"Your encoded secret is {encoded_word}")
+    stringToEncode = input("Enter a word to encode :- ")
+    words = stringToEncode.split(" ")
+    encoded_secret = encode(words)
+    print(f"Your encoded secret is {encoded_secret}")
 elif (choice == 2):
-    encoded_word = input("Enter the encoded word you want to decode :- ")
-    decoded_word = decode(encoded_word)
+    stringToDecode = input("Enter the encoded word you want to decode :- ")
+    words = stringToDecode.split(" ")
+    decoded_word = decode(words)
     print(f"Your decoded word is {decoded_word}")
 else:
     print("Incorrect input")
